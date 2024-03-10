@@ -1,0 +1,126 @@
+)
+await box.purchaseDrug(2, {value: ethers.parseEther("1.0")}
+await box.addDrug('ab', 1, 2)
+await box.addDrug('a', 1, 1)
+const box = await Box.attach('0x5FbDB2315678afecb367f032d93F642f64180aa3')
+const Box = await ethers.getContractFactory('DrugSupplyChain')
+await drug.purchaseDrug(3, {value: ethers.parseEther("1.0")})
+await drug.addDrug('abcdef', 10, 1)
+await drug.purchaseDrug(2, {value: ethers.parseEther("1.0")})
+await drug.purchaseDrug(2, {value: ethers.parseEther("80.0")})
+await drug.purchaseDrug(2, {value: ethers.parseEther("10.0")})
+await drug.addDrug('abcde', 10, 10)
+await drug.purchaseDrug(1, {value: ethers.parseEther("10.0")})
+await drug.purchaseDrug(1, {value: ethers.utils.parseEther("10.0")})
+await drug.purchaseDrug(1, {value: ethers.parseEther("1.0")})
+await drug.purchaseDrug(1, {value: ethers.utils.parseEther("1.0")})
+    value: ethers.utils.parseEther("1.0")
+{
+    value: ethers.utils.parseEther("1.0")
+await drug.purchaseDrug(1, {)
+ await contract.connect(accounts[0]).receive({ value: ethers.utils.parseEther("1") })
+ether_balance = ethers.formatEther(account_balance.toString())
+account_balance = await ethers.provider.getBalance(accounts[0].address)
+const accounts1 = await ethers.getSigners()
+const accounts = await ethers.getSigners()
+myContract = await MyContract.connect(acc1).deploy(1000);
+const MyContract = await ethers.getContractFactory("DrugSupplyChain")
+[theDefaultDeployer, acc1] = await ethers.getSigners();
+await drug.purchaseDrug(1)
+await drug.purchaseDrug('123')
+await drug.addDrug('123', 1, 1)
+await drug.purchaseDrug('a')
+await drug.addDrug('a', 1, 1)
+const drug = await Drug.attach('0x5FbDB2315678afecb367f032d93F642f64180aa3')
+await box.addDrug('a', 1, 1)
+await box.addDrug(a, 1, 1)
+const box = await Box.attach('0x5FbDB2315678afecb367f032d93F642f64180aa3')
+const Drug = await ethers.getContractFactory('DrugSupplyChain');
+const Box = await ethers.getContractFactory('Hello');
+ether_balance = ethers.formatEther(account_balance.toString())
+ether_balance = ethers.utils.formatEther(account_balance.toString())
+account_balance = await ethers.provider.getBalance(accounts[0].address)
+const accounts = await ethers.getSigners()
+ether_balance = ethers.utils.formatEther(account_balance.toString())
+BigNumber { value: "9999999824474125000000" }
+account_balance = await ethers.provider.getBalance(accounts[0].address)
+const accounts = await ethers.getSigners()
+await box.getBalance()
+await box.purchaseDrug(2)
+await box.addDrug("name", 1, 0)
+await box.getBalance()
+box.getBalance()
+await box.purchaseDrug(1)
+box.getBalance()
+await box.addDrug("name", 1, 1)
+const box = await a.attach('0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0')
+const a = await ethers.getContractFactory('DrugSupplyChain');
+console.log(accounts)
+console.log(account)
+console.log(balance)
+console.log("Ether balance:", ethers.utils.formatEther(balance).toString(), "ETH")
+var balance = await ethers.provider.getBalance(account.address)
+var account = accounts[0]
+var accounts = await ethers.getSigners()
+console.log("Ether balance:", ethers.utils.formatEther(balance).toString(), "ETH")
+const { ethers } = require("hardhat")
+console.log("Ether balance:", ethers.utils.formatEther(balance).toString(), "ETH")
+var balance = await ethers.provider.getBalance(account.address)
+var account = accounts[0]
+var accounts = await ethers.getSigners()
+console.log(box.balance)
+await box.purchaseDrug(1)
+await box.addDrug("name", 1, 1)
+const box = await a.attach('0xa513E6E4b8f2a923D98304ec87F64353C4D5C853')
+const a = await ethers.getContractFactory('DrugSupplyChain');
+await box.purchaseDrug(1)
+await box.addDrug("name", 1, 1)
+const box = await a.attach('0xa513E6E4b8f2a923D98304ec87F64353C4D5C853')
+await box.addDrug("name", 1, 1)
+const a = await ethers.getContractFactory('DrugSupplyChain');
+const weiValue1 = ethers.BigNumber.from("9999998796340527340814")
+const weiValue = ethers.BigNumber.from("9999998796340527340814")
+const weiValue = ethers1.BigNumber.from("9999998796340527340814")
+ console.log("Ether balance:", ethers1.utils.formatEther(balance2).toString(), "ETH")
+const { ethers1 } = require("ethers")
+const { ethers } = require("ethers")
+const weiValue = ethers.BigNumber.from("9999998796340527340814")
+ console.log("Ether balance:", ethers.utils.formatEther(balance2).toString(), "ETH")
+console.log(balance2)
+console.log("Ether balance:", ethers.utils.formatEther(balance2), "ETH");
+const balance2 = await ethers.provider.getBalance(acc1.address)
+console.log(acc1)
+const balance1 = await acc1.getBalance()
+const balance = await acc1.getBalance()
+const acc1 = accounts[0]
+const account = accounts[0]
+const accounts = await ethers.getSigners()
+const { ethers } = require("hardhat")
+const balance = await acc.getBalance();
+const acc = account[0]
+const account = await ethers.getSigners();
+await box.purchaseDrug(3)
+await box.addDrug("name3", 2, 0)
+await box.purchaseDrug(2)
+await box.addDrug("name1", 2, 1)
+await box.purchaseDrug(1)
+await box.addDrug("name", 1, 10)
+await a.addDrug("name", 1, 10)
+await a.addDrug(name, 1, 10)
+const box = await a.attach('0x5FbDB2315678afecb367f032d93F642f64180aa3')
+const a = await ethers.getContractFactory('DrugSupplyChain');
+const a = await ethers.getContractFactory('Hello');
+const H = await ethers.getContractFactory('Hello');
+const H = await ethers.getContractFactory('DrugSupplyChain');
+const Box = await ethers.getContractFactory('DrugSupplyChain')
+await h.get()
+await h.set('b')
+await h.get()
+await h.set('a')
+await h.store('a')
+await h.store(a)
+await h.store("a")
+const h = await H.attach('0x5FbDB2315678afecb367f032d93F642f64180aa3')
+const H = await ethers.getContractFactory('Hello');
+const Box = await ethers.getContractFactory('Hello');
+const Box = await ethers.getContractFactory('Box');
