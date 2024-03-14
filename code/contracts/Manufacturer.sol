@@ -18,9 +18,9 @@ contract Manufacturer {
     }
 
     function addDrug(uint id, string memory _name, uint _quantity, uint _price) private {
-        drugCount++;
-        drugs[drugCount] = Drug(id, _name, _quantity, _price, msg.sender, false);
-        emit DrugAdded(id, _name, _quantity, _price, msg.sender);
+        drugcount++;
+        drugs[drugcount] = new Drug(id, _name, _quantity, _price, msg.sender, false);
+
     }
 
     //Receivers are always WD for these three functions
@@ -38,7 +38,7 @@ contract Manufacturer {
     }
 
     // on a specific drug for a specific IN? - receiver: IN
-    funtion sendDiscountCode() private {
+    function sendDiscountCode() private {
     }
 
 

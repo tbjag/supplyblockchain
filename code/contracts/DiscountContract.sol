@@ -5,14 +5,20 @@ import "./Drug.sol";
 contract DiscountContract {
     uint discountCode;
     address insurer;
-    address manufact;
     uint drugID;
     /*Solidity doesn't have floating points var type,
-    so discountPrice will be a negative value.
-    discounted price of each pill = drug.price + discountPrice 
+    discounted price of each pill = drug.price - discountPrice 
     e.g. 
     */
-    int discountPrice;
+    uint discountPrice;
     uint dateFinalized;
 
+    constructor (uint code, address ) {
+
+    }
+
+    function getDiscountCode() public view returns (uint) {return discountCode;}
+    function getDiscountPrice() public view returns (uint) {return discountPrice;}
+    function getDrugID() public view returns (uint) {return drugID;}
+    function getInsurer() public view returns (address) {return insurer;}
 }
