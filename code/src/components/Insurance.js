@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import config from '../config/config.json'
 
 const Insurance = () => {
   // State for contract form inputs
@@ -30,8 +31,7 @@ const Insurance = () => {
 
   return (
     <div>
-      <h2>Insurance</h2>
-      <p>Welcome to the insurance page!</p>
+      <h2>Insurance | User Id: {config.id}</h2>
 
       <div>
         <h3>Send Contract to Manufacture</h3>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import blah from '../serverFunctions/test';
+import config from '../config/config.json'
 
 const Pharmacy = () => {
   // Fake inventory of drugs
@@ -26,8 +26,7 @@ const Pharmacy = () => {
 
   return (
     <div>
-      <h2>Pharmacy</h2>
-      <p>Welcome to the pharmacy page!</p>
+      <h2>Pharmacy | User Id: {config.id}</h2>
 
       <h3>Inventory</h3>
       <ul>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import config from '../config/config.json'
 
 //TODO, add current contract drugs/discounts on them
 
@@ -42,8 +43,7 @@ const Manufacture = () => {
 
   return (
     <div>
-      <h2>Manufacture</h2>
-      <p>Welcome to the manufacture page!</p>
+      <h2>Manufacture | User Id: {config.id}</h2>
 
       <div>
         <h3>Incoming Requests</h3>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pharmacy from '../serverFunctions/test';
+import config from '../config/config.json'
 
 const Wholesale = () => {
   // Fake incoming requests of drugs
@@ -33,8 +33,7 @@ const Wholesale = () => {
 
   return (
     <div>
-      <h2>Wholesale</h2>
-      <p>Welcome to the wholesale page!</p>
+      <h2>Wholesale | User Id: {config.id}</h2>
 
       <div>
         <h3>Incoming Requests</h3>
