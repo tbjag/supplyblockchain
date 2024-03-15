@@ -12,12 +12,15 @@ const Manufacture = () => {
   ]);
 
   // Fake list of contract requests
-  const [contractRequests, setContractRequests] = useState([]);
+  const [contractRequests, setContractRequests] = useState([
+    { id: 1, drug: 'Drug A', discount: 5, amount: 20000 }
+  ]);
 
   // State for discount code form inputs
   const [discountCodeForm, setDiscountCodeForm] = useState({
     drug: '',
-    discount: ''
+    discount: '',
+    expirationDate: ''
   });
 
   // Function to handle confirmation of incoming requests
@@ -38,7 +41,7 @@ const Manufacture = () => {
     // Logic to send discount code, here you can implement your desired action
     console.log("Discount Code Sent:", discountCodeForm);
     // Reset the form fields after sending the discount code
-    setDiscountCodeForm({ drug: '', discount: '' });
+    setDiscountCodeForm({ drug: '', discount: '', expirationDate: '' });
   };
 
   return (
@@ -62,7 +65,7 @@ const Manufacture = () => {
         <ul>
           {contractRequests.map(request => (
             <li key={request.id}>
-              Contract for {request.drug} - Discount: {request.discount}% - Paid Amount: ${request.amount} - 
+              Contract for {request.drug} - Discount: {request.discount} - Paid Amount: ${request.amount} - 
               <button onClick={() => handleApproveContract(request.id)}>Approve Contract</button>
             </li>
           ))}
@@ -87,6 +90,15 @@ const Manufacture = () => {
               type="number"
               value={discountCodeForm.discount}
               onChange={e => setDiscountCodeForm({ ...discountCodeForm, discount: e.target.value })}
+            />
+          </label>
+          <br />
+          <label>
+            Expiration Date:
+            <input
+              type="date"
+              value={discountCodeForm.expirationDate}
+              onChange={e => setDiscountCodeForm({ ...discountCodeForm, expirationDate: e.target.value })}
             />
           </label>
           <br />
