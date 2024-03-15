@@ -34,8 +34,12 @@ const Pharmacy = () => {
     amount: 0,
     drug: '',
     price: 0,
-    discountCode: ''
+    discountCode: '',
+    wholesaleId: '' // New field for wholesale ID
   });
+
+  // Wholesale ID list
+  const wholesaleIds = ['wd1', 'wd2', 'wd3'];
 
   // Function to handle order form submission
   const handleOrderSubmit = (e) => {
@@ -56,7 +60,7 @@ const Pharmacy = () => {
             <ul>
               {drug.coveragePlans.map((plan, index) => (
                 <li key={index}>
-                  Coverage Plan: {plan.plan} - Discount: {plan.discountRate}% - Discount Code: {plan.discountCode}
+                  Coverage Plan: {plan.plan} - Discount: {plan.discountRate} - Discount Code: {plan.discountCode}
                 </li>
               ))}
             </ul>
@@ -106,6 +110,21 @@ const Pharmacy = () => {
             value={orderForm.discountCode}
             onChange={e => setOrderForm({ ...orderForm, discountCode: e.target.value })}
           />
+        </label>
+        <br />
+        <label>
+          Wholesale ID:
+          <select
+            value={orderForm.wholesaleId}
+            onChange={e => setOrderForm({ ...orderForm, wholesaleId: e.target.value })}
+          >
+            <option value="">Select Wholesale ID</option>
+            {wholesaleIds.map(id => (
+              <option key={id} value={id}>
+                {id}
+              </option>
+            ))}
+          </select>
         </label>
         <br />
         <button type="submit">Order</button>
