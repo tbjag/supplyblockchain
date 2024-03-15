@@ -1,12 +1,32 @@
 import React, { useState } from 'react';
-import config from '../config/config.json'
+import config from '../config/config.json';
 
 const Pharmacy = () => {
-  // Fake inventory of drugs
+  // Updated inventory of drugs with different coverage plans
   const [inventory, setInventory] = useState([
-    { id: 1, name: 'Drug A', price: 10, quantity: 100 },
-    { id: 2, name: 'Drug B', price: 20, quantity: 50 },
-    { id: 3, name: 'Drug C', price: 15, quantity: 75 }
+    { 
+      id: 1, 
+      name: 'Drug A', 
+      price: 10, 
+      quantity: 100, 
+      coveragePlans: [
+        { plan: 'Plan A', discountRate: 0, discountCode: 'CODE_A' },
+        { plan: 'Plan B', discountRate: 5, discountCode: 'CODE_B' },
+        { plan: 'Plan C', discountRate: 10, discountCode: 'CODE_C' }
+      ] 
+    },
+    { 
+      id: 2, 
+      name: 'Drug B', 
+      price: 20, 
+      quantity: 50, 
+      coveragePlans: [
+        { plan: 'Plan X', discountRate: 3, discountCode: 'CODE_X' },
+        { plan: 'Plan Y', discountRate: 7, discountCode: 'CODE_Y' },
+        { plan: 'Plan Z', discountRate: 12, discountCode: 'CODE_Z' }
+      ] 
+    },
+    // Add more drugs as needed
   ]);
 
   // State for form inputs
@@ -33,6 +53,13 @@ const Pharmacy = () => {
         {inventory.map(drug => (
           <li key={drug.id}>
             {drug.name} - Price: ${drug.price} - Quantity: {drug.quantity}
+            <ul>
+              {drug.coveragePlans.map((plan, index) => (
+                <li key={index}>
+                  Coverage Plan: {plan.plan} - Discount: {plan.discountRate}% - Discount Code: {plan.discountCode}
+                </li>
+              ))}
+            </ul>
           </li>
         ))}
       </ul>
