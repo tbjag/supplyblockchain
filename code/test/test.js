@@ -90,7 +90,7 @@ describe("Test Supply Chain contract", function () {
         .withArgs(0, 10, 0);
 
         // PH confirms Drug Shipment
-        await expect(contract.connect(PH_addr).confirmDrugShipment(12, 10, 0))
+        await expect(contract.connect(PH_addr).confirmDrugShipment(12, 10, 1))
         .to.emit(contract, "ReqConfirmedByPH")
         .withArgs(12, PH_addr, WD_addr);
 
