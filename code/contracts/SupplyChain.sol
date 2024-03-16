@@ -180,6 +180,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         Drug[] memory thisInventory = pharmacyInventory[msg.sender];
         while(i < thisInventory.length) {
             console.log(thisInventory[i].id, ": quant - " , thisInventory[i].quantity);
+            i++;
         }
     }
 
@@ -188,6 +189,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         Drug[] memory thisInventory = wholesaleInventory[msg.sender];
         while(i < thisInventory.length) {
             console.log(thisInventory[i].id, ": quant - " , thisInventory[i].quantity);
+            i++;
         }
     }
 
