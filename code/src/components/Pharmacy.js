@@ -1,33 +1,9 @@
-import React, { useState } from 'react';
-import config from '../config/config.json';
+import React, { useState, useEffect } from 'react';
+import config from '../config/pharmExample.json';
 
 const Pharmacy = () => {
-  // Updated inventory of drugs with different coverage plans
-  const [inventory, setInventory] = useState([
-    { 
-      id: 1, 
-      name: 'Drug A', 
-      price: 10, 
-      quantity: 100, 
-      coveragePlans: [
-        { plan: 'Plan A', discountRate: 0, discountCode: 'CODE_A' },
-        { plan: 'Plan B', discountRate: 5, discountCode: 'CODE_B' },
-        { plan: 'Plan C', discountRate: 10, discountCode: 'CODE_C' }
-      ] 
-    },
-    { 
-      id: 2, 
-      name: 'Drug B', 
-      price: 20, 
-      quantity: 50, 
-      coveragePlans: [
-        { plan: 'Plan X', discountRate: 3, discountCode: 'CODE_X' },
-        { plan: 'Plan Y', discountRate: 7, discountCode: 'CODE_Y' },
-        { plan: 'Plan Z', discountRate: 12, discountCode: 'CODE_Z' }
-      ] 
-    },
-    // Add more drugs as needed
-  ]);
+  // Inventory of drugs with different coverage plans
+  const [inventory, setInventory] = useState(config.inventory);
 
   // State for form inputs
   const [orderForm, setOrderForm] = useState({
@@ -35,11 +11,14 @@ const Pharmacy = () => {
     drug: '',
     price: 0,
     discountCode: '',
-    wholesaleId: '' // New field for wholesale ID
+    wholesaleId: ''
   });
 
+  // State to track selected drug and its coverage plans
+  const [selectedDrug, setSelectedDrug] = useState(null);
+
   // Wholesale ID list
-  const wholesaleIds = ['wd1', 'wd2', 'wd3'];
+  const wholesaleIds = config.wholesaleIds;
 
   // Function to handle order form submission
   const handleOrderSubmit = (e) => {
@@ -48,11 +27,35 @@ const Pharmacy = () => {
     console.log("Order Submitted:", orderForm);
   };
 
+  // Function to handle drug selection
+  const handleDrugSelect = (e) => {
+    const selectedDrugName = e.target.value;
+    const selectedDrugData = inventory.find(drug => drug.name === selectedDrugName);
+    setSelectedDrug(selectedDrugData);
+    setOrderForm({ ...orderForm, drug: selectedDrugName, discountCode: '', price: 0 }); // Reset discount code and price when drug changes
+  };
+
+  // Function to calculate price based on amount, drug price, and discount rate
+  const calculatePrice = () => {
+    if (selectedDrug && orderForm.amount && orderForm.discountCode) {
+      const selectedPlan = selectedDrug.coveragePlans.find(plan => plan.discountCode === orderForm.discountCode);
+      if (selectedPlan) {
+        const price = orderForm.amount * (selectedDrug.price - selectedPlan.discountRate);
+        setOrderForm({ ...orderForm, price });
+      }
+    }
+  };
+
+  // Effect to recalculate price when amount, drug, or discount code changes
+  useEffect(() => {
+    calculatePrice();
+  }, [orderForm.amount, orderForm.discountCode, selectedDrug]);
+
   return (
     <div>
-      <h2>Pharmacy | User Id: {config.id}</h2>
+      <h2>Pharmacy | User ID: {config.id}</h2>
 
-      <h3>Inventory</h3>
+      <h3>Plans</h3>
       <ul>
         {inventory.map(drug => (
           <li key={drug.id}>
@@ -83,7 +86,7 @@ const Pharmacy = () => {
           Drug:
           <select
             value={orderForm.drug}
-            onChange={e => setOrderForm({ ...orderForm, drug: e.target.value })}
+            onChange={handleDrugSelect}
           >
             <option value="">Select Drug</option>
             {inventory.map(drug => (
@@ -95,20 +98,27 @@ const Pharmacy = () => {
         </label>
         <br />
         <label>
+          Discount Code:
+          <select
+            value={orderForm.discountCode}
+            onChange={e => setOrderForm({ ...orderForm, discountCode: e.target.value })}
+          >
+            <option value="">Select Discount Code</option>
+            {selectedDrug &&
+              selectedDrug.coveragePlans.map(plan => (
+                <option key={plan.discountCode} value={plan.discountCode}>
+                  {plan.discountCode}
+                </option>
+              ))}
+          </select>
+        </label>
+        <br />
+        <label>
           Price:
           <input
             type="number"
             value={orderForm.price}
-            onChange={e => setOrderForm({ ...orderForm, price: parseInt(e.target.value) })}
-          />
-        </label>
-        <br />
-        <label>
-          Discount Code:
-          <input
-            type="text"
-            value={orderForm.discountCode}
-            onChange={e => setOrderForm({ ...orderForm, discountCode: e.target.value })}
+            readOnly // Price is now read-only
           />
         </label>
         <br />
