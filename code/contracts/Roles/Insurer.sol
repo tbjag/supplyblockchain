@@ -31,7 +31,7 @@ contract Insurer {
     }
 
     modifier onlyIN(){
-        require(isIN(msg.sender));
+        require(isIN(msg.sender), "Not an Insurer!");
         _;
     }
 

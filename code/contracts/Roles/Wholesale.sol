@@ -31,7 +31,7 @@ contract Wholesale {
     }
 
     modifier onlyWD(){
-        require(isWD(msg.sender));
+        require(isWD(msg.sender), "Not a Wholesale Distributor!");
         _;
     }
 
