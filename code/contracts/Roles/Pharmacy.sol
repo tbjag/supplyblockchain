@@ -5,43 +5,43 @@ import "./Roles.sol";
 contract Pharmacy {
     using Roles for Roles.Role;
 
-    Roles.Role private pharmacies;    
-    uint counter2;
+    Roles.Role private _pharmacies;    
+    uint phcounter;
 
     event PHAdded(address indexed account, uint accNum);
     event PHRemoved(address indexed account);
 
     constructor ()  {
-        counter2 = 0;
-        _addPH(msg.sender, counter2++);
+        phcounter = 0;
     }
     
-    function addMeAsPH() public {
-        _addPH(msg.sender, counter2++);
+    function addThisAsPH(address account) public {
+        _addPH(account, phcounter*5);
+        phcounter++;
     }
 
     function _addPH(address account, uint accNum) internal {
-        pharmacies.add(account, accNum);
+        _pharmacies.add(account, accNum);
 
         emit PHAdded(account, accNum);
     }
 
     function _removePH(address account) internal {
-        pharmacies.remove(account);
+        _pharmacies.remove(account);
         emit PHRemoved(account);
     }
 
     modifier onlyPH(){
-        require(isPH(msg.sender), "Not a valid Pharmacy");
+        require(isPH(msg.sender), "Not a Pharmacy!");
         _;
     }
 
     function isPH(address account) public view returns (bool) {
-        return pharmacies.has(account);
+        return _pharmacies.has(account);
     }
 
     function getPHaddr(uint accNumber) public view returns (address) {
-        return pharmacies.returnAddress(accNumber);
+        return _pharmacies.returnAddress(accNumber);
     }
 
 }
