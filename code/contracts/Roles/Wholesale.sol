@@ -5,11 +5,11 @@ import "./Roles.sol";
 contract Wholesale {
     using Roles for Roles.Role;
 
-    uint counter;
+    uint counter1;
 
     constructor () {
-        counter = 6;
-        _addWD(msg.sender, counter++);  
+        counter1 = 6;
+        _addWD(msg.sender, counter1++);  
     }
 
     Roles.Role private wholesales;
@@ -18,8 +18,8 @@ contract Wholesale {
     event WDRemoved(address indexed account);
 
     function addMeAsWD() public {
-        _addWD(msg.sender, counter++);
-        emit WDAdded(msg.sender, counter);
+        _addWD(msg.sender, counter1++);
+        emit WDAdded(msg.sender, counter1);
     }
 
     function _addWD(address account, uint accNum) internal {

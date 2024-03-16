@@ -33,7 +33,7 @@ describe("Test Supply Chain contract", function () {
         // Add Drug
         await expect(contract.connect(owner).addDrug('DrugA', 10))
         .to.emit(contract, "DrugAdded")
-        .withArgs(0, 'DrugA', 0, 1);
+        .withArgs(0, 'DrugA', 0, 10);
     });
 
     it("PH: Add Drug should emit DrugAddedPH event", async function () {
@@ -48,7 +48,7 @@ describe("Test Supply Chain contract", function () {
     it("Non-PH: Add Drug should fail", async function () {
         // Add Drug in PH (not permitted)
         await contract.connect(owner).addDrug('DrugA', 10);
-        await expect(contract.connect(owner_addr).addDrugInPH(0, 10))
+        await expect(contract.connect(owner).addDrugInPH(0, 10))
         .to.be.revertedWith("Not a valid Pharmacy");
     });
 
@@ -64,7 +64,7 @@ describe("Test Supply Chain contract", function () {
     it("Non-WD: Add Drug should fail", async function () {
         // Add Drug in WD (not permitted)
         await contract.connect(owner).addDrug('DrugA', 10);
-        await expect(contract.connect(owner_addr).addDrugInWD(0, 10))
+        await expect(contract.connect(owner).addDrugInWD(0, 10))
         .to.be.revertedWith("Not a valid WD");
     });
 
@@ -81,13 +81,13 @@ describe("Test Supply Chain contract", function () {
         // Add Discount code
         await contract.connect(owner).addDrug('DrugA', 10);
         await contract.connect(IN_addr).addMeAsIN();
-        await expect(contract.connect(IN_addr).addDiscountInIN(1, 5, 0, 4))
+        await expect(contract.connect(owner).addDiscountInIN(1, 5, 0, 4))
         .to.be.revertedWith("Not a valid Insurer");
     });
 
     it("Supply chain: PH request shipment, WD ships drug, PH confirms shipment", async function () {
         // Add Drug
-        await contract.connect(owner).addDrug('DrugA', 10)
+        await contract.connect(owner).addDrug('DrugA', 10);
 
         // Add Discount code
         await contract.connect(owner).addDrug('DrugA', 10);
@@ -98,7 +98,7 @@ describe("Test Supply Chain contract", function () {
 
         // PH Requests Drug Shipment
         await contract.connect(PH_addr).addMeAsPH();
-        await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, WD_addr, 1, {value: ethers.parseEther("50")}))
+        await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, 6, 1, {value: ethers.parseEther("50")}))
         .to.emit(contract, "SendRequestByPH")
         .withArgs(0, 10, 50, WD_addr);
 
@@ -130,7 +130,7 @@ describe("Test Supply Chain contract", function () {
 
         // Request Drug Shipment from PH
         await contract.connect(PH_addr).addMeAsPH();
-        await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, WD_addr, 1))
+        await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, 6, 1))
         .to.be.revertedWith("Insufficient fund.");
     });
 
@@ -147,7 +147,7 @@ describe("Test Supply Chain contract", function () {
 
         // Request Drug Shipment
         await contract.connect(PH_addr).addMeAsPH();
-        await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, WD_addr, 1, {value: ethers.parseEther("50")}))
+        await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, 6, 1, {value: ethers.parseEther("50")}))
         .to.emit(contract, "SendRequestByPH")
         .withArgs(0, 10, 50, WD_addr);
 

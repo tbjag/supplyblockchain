@@ -6,18 +6,18 @@ contract Pharmacy {
     using Roles for Roles.Role;
 
     Roles.Role private pharmacies;    
-    uint counter;
+    uint counter2;
 
     event PHAdded(address indexed account, uint accNum);
     event PHRemoved(address indexed account);
 
     constructor ()  {
-        counter = 0;
-        _addPH(msg.sender, counter++);
+        counter2 = 0;
+        _addPH(msg.sender, counter2++);
     }
     
     function addMeAsPH() public {
-        _addPH(msg.sender, counter++);
+        _addPH(msg.sender, counter2++);
     }
 
     function _addPH(address account, uint accNum) internal {
