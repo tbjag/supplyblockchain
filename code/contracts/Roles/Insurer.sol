@@ -6,21 +6,22 @@ contract Insurer {
     using Roles for Roles.Role;
 
     constructor () {
-        _addIN(msg.sender);  
+        uint counter = 4;
+        _addIN(msg.sender, counter++);  
     }
 
-    Roles.Role private Insurers;
+    Roles.Role private insurers;
 
     event INAdded(address indexed account);
     event INRemoved(address indexed account);
 
-    function _addIN(address account) internal {
-        Insurers.add(account);
+    function _addIN(address account, uint accNum) internal {
+        insurers.add(account, accNum);
         emit INAdded(account);
     }
 
     function _removeIN(address account) internal {
-        Insurers.remove(account);
+        insurers.remove(account);
         emit INRemoved(account);
     }
 
@@ -30,8 +31,10 @@ contract Insurer {
     }
 
     function isIN(address account) public view returns (bool) {
-        return Insurers.has(account);
+        return insurers.has(account);
     }
 
-
+    function getINaddr(uint accNumber) public view returns (address) {
+        return insurers.returnAddress(accNumber);
+    }
 }

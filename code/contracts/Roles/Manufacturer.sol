@@ -6,21 +6,22 @@ contract Manufacturer {
     using Roles for Roles.Role;
 
     constructor () {
-        _addMA(msg.sender);  
+        uint counter = 2;
+        _addMA(msg.sender, counter++);  
     }
 
-    Roles.Role private Manufacturers;
+    Roles.Role private manufacturers;
 
     event MAAdded(address indexed account);
     event MARemoved(address indexed account);
 
-    function _addMA(address account) internal {
-        Manufacturers.add(account);
+    function _addMA(address account, uint accNum) internal {
+        manufacturers.add(account, accNum);
         emit MAAdded(account);
     }
 
     function _removeMA(address account) internal {
-        Manufacturers.remove(account);
+        manufacturers.remove(account);
         emit MARemoved(account);
     }
 
@@ -30,8 +31,10 @@ contract Manufacturer {
     }
 
     function isMA(address account) public view returns (bool) {
-        return Manufacturers.has(account);
+        return manufacturers.has(account);
     }
 
-
+    function getMAaddr(uint accNumber) public view returns (address) {
+        return manufacturers.returnAddress(accNumber);
+    }
 }

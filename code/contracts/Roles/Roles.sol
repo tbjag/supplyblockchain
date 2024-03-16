@@ -6,17 +6,20 @@ pragma solidity ^0.8.0;
  */
 library Roles {
   struct Role {
+    mapping (uint => address) maps;
     mapping (address => bool) bearer;
   }
 
   /**
    * @dev give an account access to this role
    */
-  function add(Role storage role, address account) internal {
+  function add(Role storage role, address account, uint accNumber) internal {
     require(account != address(0));
     require(!has(role, account));
-
+    
+    role.maps[accNumber] = account;
     role.bearer[account] = true;
+
   }
 
   /**
@@ -40,5 +43,9 @@ library Roles {
   {
     require(account != address(0));
     return role.bearer[account];
+  }
+
+  function returnAddress(Role storage role, uint accNumber) internal view returns (address) {
+    return role.maps[accNumber];
   }
 }

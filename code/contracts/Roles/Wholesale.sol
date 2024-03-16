@@ -5,22 +5,30 @@ import "./Roles.sol";
 contract Wholesale {
     using Roles for Roles.Role;
 
+    uint counter;
+
     constructor () {
-        _addWD(msg.sender);  
+        counter = 6;
+        _addWD(msg.sender, counter++);  
     }
 
-    Roles.Role private Wholesales;
+    Roles.Role private wholesales;
 
-    event WDAdded(address indexed account);
+    event WDAdded(address indexed account, uint accNum);
     event WDRemoved(address indexed account);
 
-    function _addWD(address account) internal {
-        Wholesales.add(account);
-        emit WDAdded(account);
+    function addMeAsWD() public {
+        _addWD(msg.sender, counter++);
+        emit WDAdded(msg.sender, counter);
+    }
+
+    function _addWD(address account, uint accNum) internal {
+        wholesales.add(account, accNum);
+        emit WDAdded(account, accNum);
     }
 
     function _removeWD(address account) internal {
-        Wholesales.remove(account);
+        wholesales.remove(account);
         emit WDRemoved(account);
     }
 
@@ -30,7 +38,10 @@ contract Wholesale {
     }
 
     function isWD(address account) public view returns (bool) {
-        return Wholesales.has(account);
+        return wholesales.has(account);
     }
 
+    function getWDaddr(uint accNumber) public view returns (address) {
+        return wholesales.returnAddress(accNumber);
+    }
 }

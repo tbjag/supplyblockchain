@@ -18,13 +18,15 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
 
     mapping (uint => Discount) public discountCodes;
 
-
-
     // entity => (drug ID => drug info)
     mapping(address => mapping(uint => Drug)) public pharmacyInventory;
     mapping(address => mapping(uint => Drug)) public wholesaleInventory;
     mapping(address => mapping(uint => Drug)) public manufacturerInventory;
 
+    // account # to addresses
+
+    // add this account address to Pharmacies when addPH is executed 
+    // 
     uint drugCount;
     uint drugRequestCount;
     uint dcCount;
@@ -57,20 +59,13 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         uint drugID;
         uint discountPrice;
         uint dateFinalized;
-    }
-
-    // account # to addresses
-    mapping (uint => address) Wholesales;
-    mapping (uint => address) Pharmacies;
-    mapping (uint => address) Manufacturers;
-    mapping (uint => address) Insurers;
-
+    }   
     
     event DrugAdded(uint id, string name, uint quantity, uint price);
     
     event DrugAddedPH(uint drugID, uint quantity, address phAddr);
     event DrugAddedWD(uint drugID, uint quantity, address wdAddr);
-    event DiscountCodeAddedPH(uint discountCode, uint drugID, address ph);
+    event DiscountCodeAddedIN(uint discountCode, uint drugID, address ins);
 
     event SendRequestByPH(uint drugID, uint q, uint totalPrice, address toWD);
     event ShipDrugByWD(uint drugID, uint quant, uint PHaccNum);
@@ -84,7 +79,8 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     }
     
     //Adding drug information about drug id, name, and price
-    function addDrug(uint dID, string memory name, uint price) public {
+    function addDrug(string memory name, uint price) public {
+        uint dID = drugCount;
         drugs[drugCount++] = Drug(dID, name, price, 0, address(0), address(0), address(0), address(0), false);
         emit DrugAdded(dID, name, 0, price);
     }
@@ -99,16 +95,16 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         emit DrugAddedWD(dID, quant, msg.sender);
     }
 
-    function addDiscountInPH(uint dcCode, uint discountprice, uint drugID, uint INaccNum) public onlyPH() {
-        address ins = Insurers[INaccNum];
+    function addDiscountInIN(uint dcCode, uint discountprice, uint drugID, uint INaccNum) public onlyIN() {
+        address ins = super.getINaddr(INaccNum);
         discountCodes[dcCode] = Discount(dcCode, ins, drugID, discountprice, block.timestamp);
-        emit DiscountCodeAddedPH(dcCode, drugID, msg.sender);
+        emit DiscountCodeAddedIN(dcCode, drugID, msg.sender);
     }
 
     function sendDrugRequestPH(uint drugID, uint quant, uint WDaccNum, uint dcCode)  public payable 
         onlyPH()   {
         uint totalPrice = (drugs[drugID].price - discountCodes[dcCode].discountPrice) * quant;
-        address payable toWDaddr = payable(Wholesales[WDaccNum]);
+        address payable toWDaddr = payable(super.getWDaddr(WDaccNum));
         require(totalPrice <= msg.value, "Insufficient fund.");
         uint reqID = drugID + quant + dcCode + WDaccNum;
         pharmacyRequests[msg.sender][reqID] = DrugRequest(reqID, drugID, quant, totalPrice, msg.sender, toWDaddr, false);
@@ -119,7 +115,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
 
     function shipDrugWD(uint drugID, uint quant, uint PHaccNum) public onlyWD() {
         require(wholesaleInventory[msg.sender][drugID].quantity >= quant, "Not enough drug quantity in the inventory.");
-        address toPHaddr = Pharmacies[PHaccNum];
+        address toPHaddr = super.getPHaddr(PHaccNum);
         wholesaleInventory[msg.sender][drugID].quantity -= quant;
         pharmacyInventory[toPHaddr][drugID].quantity += quant;
         if(wholesaleInventory[msg.sender][drugID].quantity == 0) wholesaleInventory[msg.sender][drugID].isSoldOut = true;
@@ -127,7 +123,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     }
 
     function confirmDrugShipment(uint reqID, uint quant, uint WDaccNum) public onlyPH() {
-        address toWDaddr = Wholesales[WDaccNum];
+        address toWDaddr = super.getWDaddr(WDaccNum);
         pharmacyRequests[msg.sender][reqID].confirmed = true;
         wholesaleRequests[toWDaddr][reqID].confirmed = true;
         emit ReqConfirmedByPH(reqID, msg.sender, toWDaddr);
