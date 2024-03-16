@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import config from '../config/config.json'
 
 const Insurance = () => {
   // State for contract form inputs
@@ -8,8 +9,12 @@ const Insurance = () => {
     paidAmount: ''
   });
 
-  // Fake list of received discount codes
-  const [receivedDiscountCodes, setReceivedDiscountCodes] = useState([]);
+  // Fake list of received discount codes with expiration dates
+  const [receivedDiscountCodes, setReceivedDiscountCodes] = useState([
+    { drug: 'Drug A', discount: 10, expiration: '2024-06-30' },
+    { drug: 'Drug B', discount: 15, expiration: '2024-07-15' },
+    { drug: 'Drug C', discount: 20, expiration: '2024-08-10' }
+  ]);
 
   // Function to handle sending a contract to manufacture
   const handleSendContract = (e) => {
@@ -30,8 +35,7 @@ const Insurance = () => {
 
   return (
     <div>
-      <h2>Insurance</h2>
-      <p>Welcome to the insurance page!</p>
+      <h2>Insurance | User Id: {config.id}</h2>
 
       <div>
         <h3>Send Contract to Manufacture</h3>
@@ -46,7 +50,7 @@ const Insurance = () => {
           </label>
           <br />
           <label>
-            Discount (%):
+            Discount (Number):
             <input
               type="number"
               value={contractForm.discount}
@@ -72,7 +76,7 @@ const Insurance = () => {
         <ul>
           {receivedDiscountCodes.map((code, index) => (
             <li key={index}>
-              Drug: {code.drug} - Discount: {code.discount}%
+              Drug: {code.drug} - Discount: {code.discount}% - Expiration: {code.expiration}
             </li>
           ))}
         </ul>
