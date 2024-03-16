@@ -72,6 +72,7 @@ describe("Test Supply Chain contract", function () {
         .withArgs(1, 0, IN_addr);
 
         // PH Requests Drug Shipment
+        await expect(contract.connect(PH_addr).addDrugInPH(0,0));
         await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, 1, 1, {value: ethers.parseEther("50")}))
         .to.emit(contract, "SendRequestByPH")
         .withArgs(0, 10, 50, WD_addr);
@@ -117,6 +118,7 @@ describe("Test Supply Chain contract", function () {
         .withArgs(1, 0, IN_addr);
 
         // Request Drug Shipment
+        await expect(contract.connect(PH_addr).addDrugInPH(0,0));
         await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, 1, 1, {value: ethers.parseEther("50")}))
         .to.emit(contract, "SendRequestByPH")
         .withArgs(0, 10, 50, WD_addr);
@@ -129,7 +131,7 @@ describe("Test Supply Chain contract", function () {
         await contract.connect(PH_addr).retrieveInventoryPH();
         await contract.connect(WD_addr).retrieveInventoryWD();
 
-        await expect(contract.connect(WD_addr).shipDrugInWD(0, 10, 0))
+        await expect(contract.connect(WD_addr).shipDrugWD(0, 10, 0))
         .to.be.revertedWith("Not enough drug quantity in the inventory.");
 
         await contract.connect(PH_addr).retrieveInventoryPH();
