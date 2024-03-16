@@ -4,9 +4,10 @@ import "./Roles.sol";
 
 contract Insurer {
     using Roles for Roles.Role;
-
+    uint counter;
+    
     constructor () {
-        uint counter = 4;
+        counter = 4;
         _addIN(msg.sender, counter++);  
     }
 
@@ -16,7 +17,7 @@ contract Insurer {
     event INRemoved(address indexed account);
 
     function addMeAsIN() public {
-        _addPH(msg.sender, counter++);
+        _addIN(msg.sender, counter++);
     }
 
     function _addIN(address account, uint accNum) internal {
