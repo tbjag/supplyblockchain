@@ -15,6 +15,10 @@ contract Insurer {
     event INAdded(address indexed account);
     event INRemoved(address indexed account);
 
+    function addMeAsIN() public {
+        _addPH(msg.sender, counter++);
+    }
+
     function _addIN(address account, uint accNum) internal {
         insurers.add(account, accNum);
         emit INAdded(account);
@@ -26,7 +30,7 @@ contract Insurer {
     }
 
     modifier onlyIN(){
-        require(isIN(msg.sender));
+        require(isIN(msg.sender), "Not a valid Insurer");
         _;
     }
 

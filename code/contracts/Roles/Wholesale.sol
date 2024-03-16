@@ -33,7 +33,7 @@ contract Wholesale {
     }
 
     modifier onlyWD(){
-        require(isWD(msg.sender));
+        require(isWD(msg.sender), "Not a valid WD");
         _;
     }
 

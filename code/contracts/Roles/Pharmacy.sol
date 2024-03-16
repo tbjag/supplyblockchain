@@ -32,7 +32,7 @@ contract Pharmacy {
     }
 
     modifier onlyPH(){
-        require(isPH(msg.sender));
+        require(isPH(msg.sender), "Not a valid Pharmacy");
         _;
     }
 
