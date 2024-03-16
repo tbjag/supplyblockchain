@@ -4,22 +4,20 @@ import "./Roles.sol";
 
 contract Wholesale {
     using Roles for Roles.Role;
-
-    uint counter1;
-
-    constructor () {
-        counter1 = 6;
-        _addWD(msg.sender, counter1++);  
-    }
-
+  
     Roles.Role private wholesales;
+    uint wdcounter;
 
     event WDAdded(address indexed account, uint accNum);
     event WDRemoved(address indexed account);
 
-    function addMeAsWD() public {
-        _addWD(msg.sender, counter1++);
-        emit WDAdded(msg.sender, counter1);
+    constructor () {
+        wdcounter = 0;
+    }
+
+    function addThisAsWD(address account) public {
+        _addWD(account, wdcounter*5 + 1);
+        wdcounter++;
     }
 
     function _addWD(address account, uint accNum) internal {
@@ -33,7 +31,7 @@ contract Wholesale {
     }
 
     modifier onlyWD(){
-        require(isWD(msg.sender), "Not a valid WD");
+        require(isWD(msg.sender));
         _;
     }
 

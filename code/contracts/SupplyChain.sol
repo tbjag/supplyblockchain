@@ -5,23 +5,25 @@ import "./Roles/Manufacturer.sol";
 import "./Roles/Pharmacy.sol";
 import "./Roles/Wholesale.sol";
 
+import "hardhat/console.sol";
+
 // between PH & WD, WD & MA 
 contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
 
     address owner;
 
     // Drug ID => Drug amount
-    mapping (uint => Drug) public drugs;
+    mapping (uint => Drug) drugs;
 
-    mapping (address => mapping(uint => DrugRequest)) public pharmacyRequests;
-    mapping (address => mapping(uint => DrugRequest)) public wholesaleRequests;
+    mapping (address => mapping(uint => DrugRequest)) pharmacyRequests;
+    mapping (address => mapping(uint => DrugRequest)) wholesaleRequests;
 
-    mapping (uint => Discount) public discountCodes;
+    mapping (uint => Discount) discountCodes;
 
-    // entity => (drug ID => drug info)
-    mapping(address => mapping(uint => Drug)) public pharmacyInventory;
-    mapping(address => mapping(uint => Drug)) public wholesaleInventory;
-    mapping(address => mapping(uint => Drug)) public manufacturerInventory;
+    // entity => (Drug array) so that we can retrieve each inventory 
+    mapping(address => Drug[]) pharmacyInventory;
+    mapping(address => Drug[]) wholesaleInventory;
+    mapping(address => mapping(uint => Drug)) manufacturerInventory;
 
     // account # to addresses
 
@@ -86,12 +88,20 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     }
 
     function addDrugInPH(uint dID, uint quant) public onlyPH() {
-        pharmacyInventory[msg.sender][dID] = Drug(dID, drugs[dID].name, drugs[dID].price, quant, msg.sender, address(0), address(0), msg.sender, false);
+        uint find = findDrugInPH(dID);
+        if(find == pharmacyInventory[msg.sender].length) {
+            pharmacyInventory[msg.sender].push(Drug(dID, drugs[dID].name, drugs[dID].price, quant, msg.sender, address(0), address(0), msg.sender, false));
+        }
+        else pharmacyInventory[msg.sender][find].quantity += quant;
         emit DrugAddedPH(dID, quant, msg.sender);
     }
 
     function addDrugInWD(uint dID, uint quant) public onlyWD() {
-        wholesaleInventory[msg.sender][dID] = Drug(dID, drugs[dID].name, drugs[dID].price, quant, msg.sender, address(0), msg.sender, address(0), false);
+        uint find = findDrugInWD(dID);
+        if(find == wholesaleInventory[msg.sender].length) {
+            wholesaleInventory[msg.sender].push(Drug(dID, drugs[dID].name, drugs[dID].price, quant, msg.sender, address(0), address(0), msg.sender, false));
+        }
+        else wholesaleInventory[msg.sender][find].quantity += quant;
         emit DrugAddedWD(dID, quant, msg.sender);
     }
 
@@ -133,5 +143,40 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
 
     }
 
+    function findDrugInPH(uint dID) public view onlyPH() returns (uint) {
+        uint len = pharmacyInventory[msg.sender].length;
+        uint ind = len;
+        for(uint i = 0; i < len; i++) {
+            if (pharmacyInventory[msg.sender][i].id == dID) ind = i;
+        }
+        return ind;
+        // if index == len, it's not found
+    }
+
+    function findDrugInWD(uint dID) public view onlyWD() returns (uint) {
+        uint len = wholesaleInventory[msg.sender].length;
+        uint ind = len;
+        for(uint i = 0; i < len; i++) {
+            if (wholesaleInventory[msg.sender][i].id == dID) ind = i;
+        }
+        return ind;
+        // if index == len, it's not found
+    }
+
+    function retrieveInventoryPH() public view onlyPH() {
+        uint i = 0;
+        Drug[] memory thisInventory = pharmacyInventory[msg.sender];
+        while(i < thisInventory.length) {
+            console.log(thisInventory[i].id, ": quant - " , thisInventory[i].quantity);
+        }
+    }
+
+    function retrieveInventoryWD() public view onlyPH() {
+        uint i = 0;
+        Drug[] memory thisInventory = wholesaleInventory[msg.sender];
+        while(i < thisInventory.length) {
+            console.log(thisInventory[i].id, ": quant - " , thisInventory[i].quantity);
+        }
+    }
 
 }

@@ -4,16 +4,21 @@ import "./Roles.sol";
 
 contract Manufacturer {
     using Roles for Roles.Role;
-
-    constructor () {
-        uint counter = 2;
-        _addMA(msg.sender, counter++);  
-    }
+    uint macounter;
 
     Roles.Role private manufacturers;
 
     event MAAdded(address indexed account);
     event MARemoved(address indexed account);
+
+    constructor () {
+        macounter = 0;
+    }
+
+    function addThisAsMA(address account) public {
+        _addMA(account, macounter*5 + 3);
+        macounter++;
+    }
 
     function _addMA(address account, uint accNum) internal {
         manufacturers.add(account, accNum);

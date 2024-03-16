@@ -4,20 +4,20 @@ import "./Roles.sol";
 
 contract Insurer {
     using Roles for Roles.Role;
-    uint counter;
-    
-    constructor () {
-        counter = 4;
-        _addIN(msg.sender, counter++);  
-    }
 
     Roles.Role private insurers;
+    uint incounter;
 
     event INAdded(address indexed account);
     event INRemoved(address indexed account);
 
-    function addMeAsIN() public {
-        _addIN(msg.sender, counter++);
+    constructor () {       
+        incounter = 0;
+    }
+
+    function addThisAsIN(address account) public {
+        _addIN(account, incounter*5 + 2);
+        incounter++;
     }
 
     function _addIN(address account, uint accNum) internal {
@@ -31,7 +31,7 @@ contract Insurer {
     }
 
     modifier onlyIN(){
-        require(isIN(msg.sender), "Not a valid Insurer");
+        require(isIN(msg.sender));
         _;
     }
 
