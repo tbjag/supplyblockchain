@@ -183,7 +183,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         }
     }
 
-    function retrieveInventoryWD() public view onlyPH() {
+    function retrieveInventoryWD() public view onlyWD() {
         uint i = 0;
         Drug[] memory thisInventory = wholesaleInventory[msg.sender];
         while(i < thisInventory.length) {

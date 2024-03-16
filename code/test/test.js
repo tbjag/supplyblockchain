@@ -9,7 +9,7 @@ describe("Test Supply Chain contract", function () {
         [PH_addr, WD_addr, IN_addr, MA_addr] = await ethers.getSigners();
         const TestContract = await ethers.getContractFactory("SupplyChain");
         contract = await TestContract.deploy();
-        contract.addPHaccount();
+        contract.addPHaccounts();
     });
 
     it("Add Drug should emit DrugAdded event", async function () {
@@ -60,7 +60,7 @@ describe("Test Supply Chain contract", function () {
     it("Non-IN: Add Discount code should fail", async function () {
         // Add Discount code (not permitted)
         await contract.addDrug('DrugA', 10);
-        await expect(contract.connect(PA_addr).addDiscountInIN(1, 5, 0, 2))
+        await expect(contract.connect(PH_addr).addDiscountInIN(1, 5, 0, 2))
         .to.be.revertedWith("Not an Insurer!");
     });
 
