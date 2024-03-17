@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
 import "./Roles.sol";
+import "hardhat/console.sol";
 
 contract Insurer {
     using Roles for Roles.Role;
@@ -41,5 +42,11 @@ contract Insurer {
 
     function getINaddr(uint accNumber) public view returns (address) {
         return insurers.returnAddress(accNumber);
+    }
+
+    function showAllIN() public view {
+        for(uint i = 0; i < insurers.length; i++){
+            console.log("Insurer acc# ", i, ": ", insurers[i]);
+        }
     }
 }

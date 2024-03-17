@@ -15,8 +15,8 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     // Drug ID => Drug amount
     mapping (uint => Drug) drugs;
 
-    mapping (address => mapping(uint => DrugRequest)) pharmacyRequests;
-    mapping (address => mapping(uint => DrugRequest)) wholesaleRequests;
+    mapping (address => DrugRequest[]) pharmacyRequests;
+    mapping (address => DrugRequest[]) wholesaleRequests;
 
     mapping (uint => Discount) discountCodes;
 
@@ -100,7 +100,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     }
 
     function addDrugInPH(uint dID, uint quant) public onlyPH() {
-        uint find = findDrugInPH(dID);
+        uint find = findDrugInPH(msg.sender, dID);
         if(find == pharmacyInventory[msg.sender].length) {
             pharmacyInventory[msg.sender].push(Drug(dID, drugs[dID].name, drugs[dID].price, quant, msg.sender, address(0), address(0), msg.sender, false));
         }
@@ -109,7 +109,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     }
 
     function addDrugInWD(uint dID, uint quant) public onlyWD() {
-        uint find = findDrugInWD(dID);
+        uint find = findDrugInWD(msg.sender, dID);
         if(find == wholesaleInventory[msg.sender].length) {
             wholesaleInventory[msg.sender].push(Drug(dID, drugs[dID].name, drugs[dID].price, quant, msg.sender, address(0), address(0), msg.sender, false));
         }
@@ -127,49 +127,80 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         onlyPH()   {
         uint totalPrice = (drugs[drugID].price - discountCodes[dcCode].discountPrice) * quant;
         address payable toWDaddr = payable(super.getWDaddr(WDaccNum));
+
         require(totalPrice <= msg.value, "Insufficient fund.");
-        uint reqID = drugID + quant + dcCode + WDaccNum;
-        pharmacyRequests[msg.sender][reqID] = DrugRequest(reqID, drugID, quant, totalPrice, msg.sender, toWDaddr, false);
-        wholesaleRequests[toWDaddr][reqID] = DrugRequest(reqID, drugID, quant, totalPrice, msg.sender, toWDaddr, false);
+
+        uint reqID = drugID + quant + dcCode + WDaccNum + now%1000;
+        pharmacyRequests[msg.sender].push(DrugRequest(reqID, drugID, quant, totalPrice, msg.sender, toWDaddr, false));
+        wholesaleRequests[toWDaddr].push(DrugRequest(reqID, drugID, quant, totalPrice, msg.sender, toWDaddr, false));
         toWDaddr.transfer(totalPrice);
         emit SendRequestByPH(drugID, quant, totalPrice, toWDaddr);
     }
 
     function shipDrugWD(uint drugID, uint quant, uint PHaccNum) public onlyWD() {
-        require(wholesaleInventory[msg.sender][drugID].quantity >= quant, "Not enough drug quantity in the inventory.");
         address toPHaddr = super.getPHaddr(PHaccNum);
-        wholesaleInventory[msg.sender][drugID].quantity -= quant;
-        pharmacyInventory[toPHaddr][drugID].quantity += quant;
-        if(wholesaleInventory[msg.sender][drugID].quantity == 0) wholesaleInventory[msg.sender][drugID].isSoldOut = true;
+        uint findDrugWD = findDrugInWD(drugID);
+
+        require(findDrugWD != wholesaleInventory[msg.sender].length, "There's no drug with drug id ", drugID, " in this wholesale.");
+        require(wholesaleInventory[msg.sender][findDrugWD].quantity >= quant, "Not enough drug quantity in the inventory.");
+        
+        wholesaleInventory[msg.sender][findDrugWD].quantity -= quant;
+        if(wholesaleInventory[msg.sender][findDrugWD].quantity == 0) wholesaleInventory[msg.sender][drugID].isSoldOut = true;
         emit ShipDrugByWD(drugID, quant, PHaccNum);
     }
 
     function confirmDrugShipment(uint reqID, uint quant, uint WDaccNum) public onlyPH() {
-        address toWDaddr = super.getWDaddr(WDaccNum);
-        pharmacyRequests[msg.sender][reqID].confirmed = true;
-        wholesaleRequests[toWDaddr][reqID].confirmed = true;
+        uint findreqPH = findRequestInPH(reqID);
+        pharmacyRequests[msg.sender][findreqPH].confirmed = true;
         emit ReqConfirmedByPH(reqID, msg.sender, toWDaddr);
     }
 
-    function addDrugRequestWD(uint drugID, uint quant, uint WDaccNum, uint dcCode) public {
-
+    function sendDrugRequestWD(uint drugID, uint quant, uint MAaccNum) public onlyWD() {
+        uint totalPrice = drugs[drugID].price * quant;
+        address payable toMAaddr = payable(super.getMAaddr(MAaccNum));
+        require(totalPrice <= msg.value, "Insufficient fund.");
+        uint reqID = drugID + quant + MAaccNum + now%1000;
+        pharmacyRequests[msg.sender].push(DrugRequest(reqID, drugID, quant, totalPrice, msg.sender, toWDaddr, false));
+        wholesaleRequests[toWDaddr].push(DrugRequest(reqID, drugID, quant, totalPrice, msg.sender, toWDaddr, false));
+        toWDaddr.transfer(totalPrice);
+        emit SendRequestByPH(drugID, quant, totalPrice, toWDaddr);
     }
 
-    function findDrugInPH(uint dID) public view onlyPH() returns (uint) {
-        uint len = pharmacyInventory[msg.sender].length;
+    function findDrugInPH(uint dID) public view returns (uint) {
+        uint len = pharmacyInventory[account].length;
         uint ind = len;
         for(uint i = 0; i < len; i++) {
-            if (pharmacyInventory[msg.sender][i].id == dID) ind = i;
+            if (pharmacyInventory[account][i].id == dID) ind = i;
         }
         return ind;
         // if index == len, it's not found
     }
 
-    function findDrugInWD(uint dID) public view onlyWD() returns (uint) {
+    function findDrugInWD(uint dID) public view returns (uint) on{
         uint len = wholesaleInventory[msg.sender].length;
         uint ind = len;
         for(uint i = 0; i < len; i++) {
-            if (wholesaleInventory[msg.sender][i].id == dID) ind = i;
+            if (wholesaleInventory[account][i].id == dID) ind = i;
+        }
+        return ind;
+        // if index == len, it's not found
+    }
+
+    function findRequestInPH(uint reqID) public view returns (uint) {
+        uint len = pharmacyRequests[msg.sender].length;
+        uint ind = len;
+        for(uint i = 0; i < len; i++) {
+            if (pharmacyRequests[account][i].id == reqID) ind = i;
+        }
+        return ind;
+        // if index == len, it's not found
+    }
+
+    function findRequestInWD(uint reqID) public view returns (uint) {
+        uint len = wholesaleRequests[msg.sender].length;
+        uint ind = len;
+        for(uint i = 0; i < len; i++) {
+            if (wholesaleRequests[account][i].id == reqID) ind = i;
         }
         return ind;
         // if index == len, it's not found
@@ -184,6 +215,10 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         }
     }
 
+    function retrieveInventoryPHFront() public view onlyPH() returns (Drug[]) {
+        return pharmacyInventory[msg.sender];
+    }
+
     function retrieveInventoryWD() public view onlyWD() {
         uint i = 0;
         Drug[] memory thisInventory = wholesaleInventory[msg.sender];
@@ -191,6 +226,13 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
             console.log(thisInventory[i].id, ": quant - " , thisInventory[i].quantity);
             i++;
         }
+    }
+
+    function showAllEntities() public view {
+        super.showAllPH();
+        super.showAllWH();
+        super.showAllMA();
+        super.showAllIN();
     }
 
 }

@@ -42,4 +42,10 @@ contract Manufacturer {
     function getMAaddr(uint accNumber) public view returns (address) {
         return manufacturers.returnAddress(accNumber);
     }
+
+    function showAllMA() public view {
+        for(uint i = 0; i < manufacturers.length; i++){
+            console.log("Manufacturer acc# ", i, ": ", manufacturers[i]);
+        }
+    }
 }

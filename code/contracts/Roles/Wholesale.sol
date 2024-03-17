@@ -42,4 +42,10 @@ contract Wholesale {
     function getWDaddr(uint accNumber) public view returns (address) {
         return wholesales.returnAddress(accNumber);
     }
+
+    function showAllWH() public view {
+        for(uint i = 0; i < wholesales.length; i++){
+            console.log("Wholesale acc# ", i, ": ", wholesales[i]);
+        }
+    }
 }
