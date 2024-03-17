@@ -176,7 +176,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         // if index == len, it's not found
     }
 
-    function findDrugInWD(uint dID) public view returns (uint) on{
+    function findDrugInWD(uint dID) public view onlyWD() returns (uint)  {
         uint len = wholesaleInventory[msg.sender].length;
         uint ind = len;
         for(uint i = 0; i < len; i++) {
