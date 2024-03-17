@@ -3,13 +3,13 @@
 const hre = require("hardhat")
 
 async function main() {
-    const HELLO  = await hre.ethers.getContractFactory("DrugSupplyChain");
+    const SupplyChain  = await hre.ethers.getContractFactory("SupplyChain");
     // deploy contracts
-    const hello  = await HELLO.deploy();
-    await hello.waitForDeployment();
-    console.log("hello deployed to: ", await hello.getAddress());
-    const contractAddress  = await hello.getAddress();
-    saveFrontendFiles(contractAddress  , "Hello");
+    const supplychain  = await SupplyChain.deploy();
+    await supplychain.waitForDeployment();
+    console.log("Supply Chain contract deployed to: ", await supplychain.getAddress());
+    const supplyChainAddress  = await supplychain.getAddress();
+    saveFrontendFiles(supplyChainAddress  , "SupplyChain");
 }
 
 function saveFrontendFiles(contractAddress, name) {
