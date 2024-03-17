@@ -43,9 +43,9 @@ contract Wholesale {
         return wholesales.returnAddress(accNumber);
     }
 
-    function showAllWH() public view {
-        for(uint i = 0; i < wholesales.length; i++){
-            console.log("Wholesale acc# ", i, ": ", wholesales[i]);
-        }
-    }
+    // function showAllWH() public view {
+    //     for(uint i = 0; i < wholesales.length; i++){
+    //         console.log("Wholesale acc# ", i, ": ", wholesales[i]);
+    //     }
+    // }
 }

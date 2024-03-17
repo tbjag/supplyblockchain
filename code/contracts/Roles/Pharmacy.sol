@@ -44,10 +44,10 @@ contract Pharmacy {
         return _pharmacies.returnAddress(accNumber);
     }
 
-    function showAllPH() public view {
-        for(uint i = 0; i < _pharmacies.length; i++){
-            console.log("Pharmacy acc# ", i, ": ", _pharmacies[i]);
-        }
-    }
+    // function showAllPH() public view {
+    //     for(uint i = 0; i < _pharmacies.length; i++){
+    //         console.log("Pharmacy acc# ", i, ": ", _pharmacies[i]);
+    //     }
+    // }
 
 }
