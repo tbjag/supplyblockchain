@@ -157,7 +157,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         emit ReqConfirmedByPH(reqID, msg.sender, toWDaddr);
     }
 
-    function sendDrugRequestWD(uint drugID, uint quant, uint MAaccNum) public onlyWD() {
+    function sendDrugRequestWD(uint drugID, uint quant, uint MAaccNum) public onlyWD() payable {
         uint totalPrice = drugs[drugID].price * quant;
         address payable toMAaddr = payable(super.getMAaddr(MAaccNum));
         require(totalPrice <= msg.value, "Insufficient fund.");
