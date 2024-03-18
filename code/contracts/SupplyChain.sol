@@ -190,7 +190,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
 
     function findRequestInPH(uint reqID) public view onlyPH() returns (uint) {
         uint len = pharmacyRequests[msg.sender].length;
-        uint ind = len;
+        uint ind = len-1;
         for(uint i = 0; i < len; i++) {
             if (pharmacyRequests[msg.sender][i].requestID == reqID) ind = i;
         }
@@ -200,7 +200,7 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
 
     function findRequestInWD(uint reqID) public view returns (uint) {
         uint len = wholesaleRequests[msg.sender].length;
-        uint ind = len;
+        uint ind = len-1;
         for(uint i = 0; i < len; i++) {
             if (wholesaleRequests[msg.sender][i].requestID == reqID) ind = i;
         }
