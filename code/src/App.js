@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import Web3 from 'web3'
-import HelloAbi from './contractsData/Hello.json'
-import HelloAddress from './contractsData/Hello-address.json' // TODO change this
+import {ethers} from 'ethers';
+import SupplyChainAbi from './contractsData/SupplyChain.json'
+import SupplyChainAddress from './contractsData/SupplyChain-address.json' // TODO change this
 
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Pharmacy from './components/Pharmacy';
@@ -39,6 +40,29 @@ const App = () => {
   const filteredNavLinks = navLinks.filter(navLink =>
     navLink.label.toLowerCase() === config.entity_type
   );
+
+  const [provider, setProvider] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+
+    async function connectToMetamask() {
+      if (window.ethereum) {
+        try {
+          const provider = new ethers.provider.Web3Provider(window.ethereum);
+          setProvider(provider);
+          await provider.send("eth_requestAccounts", []);
+          const signers = provider.getSigner();
+          const address = await signers.getAddress();
+          console.log("Metamask connected : " + address);
+          setIsConnected(true);
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        //
+        console.error("Metamask is not connected in the browser");
+      }
+    }
 
   return (
     <BrowserRouter>
