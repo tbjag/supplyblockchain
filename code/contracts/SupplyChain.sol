@@ -153,6 +153,8 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     function confirmDrugShipment(uint reqID, uint quant, uint WDaccNum) public onlyPH() {
         uint findreqPH = findRequestInPH(reqID);
         pharmacyRequests[msg.sender][findreqPH].confirmed = true;
+        uint drugID = pharmacyRequests[msg.sender][findreqPH].drugID;
+        pharmacyInventory[msg.sender][drugID].quantity += quant;
         address toWDaddr = super.getWDaddr(WDaccNum);
         emit ReqConfirmedByPH(reqID, msg.sender, toWDaddr);
     }
