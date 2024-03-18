@@ -106,7 +106,7 @@ describe("Test Supply Chain contract", function () {
         .withArgs(1, 0, IN_addr);
 
         // Request Drug Shipment from PH
-        await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, 1, 1))
+        await expect(contract.connect(PH_addr).sendDrugRequestPH(0, 10, 1, 1, {value: ethers.parseEther("10")}))
         .to.be.revertedWith("Insufficient fund.");
     });
 
