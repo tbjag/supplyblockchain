@@ -127,6 +127,8 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     function sendDrugRequestPH(uint drugID, uint quant, uint WDaccNum, uint dcCode)  public payable 
         onlyPH()   {
         uint totalPrice = (drugs[drugID].price - discountCodes[dcCode].discountPrice) * quant;
+	console.log("total price: ", totalPrice);
+	console.log("msg.value: ", msg.value);
         address payable toWDaddr = payable(super.getWDaddr(WDaccNum));
 
         require(totalPrice <= msg.value, "Insufficient fund.");

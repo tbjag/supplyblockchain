@@ -46,7 +46,9 @@ const App = () => {
   const [isConnected, setIsConnected] = useState(false);
 
     async function connectToMetamask() {
+	    console.log("connectToMetamask started");	  
       if (window.ethereum) {
+	console.log("window.ethereum started");
         try {
           const provider = new ethers.provider.Web3Provider(window.ethereum);
           setProvider(provider);
