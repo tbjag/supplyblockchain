@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
 import "./Roles.sol";
+import "hardhat/console.sol";
 
 contract Manufacturer {
     using Roles for Roles.Role;
@@ -43,9 +44,11 @@ contract Manufacturer {
         return manufacturers.returnAddress(accNumber);
     }
 
-    // function showAllMA() public view {
-    //     for(uint i = 0; i < manufacturers.length; i++){
-    //         console.log("Manufacturer acc# ", i, ": ", manufacturers[i]);
-    //     }
-    // }
+    function showAllMA() public view {
+        uint ind = 0;
+        for(uint i = 0; i < macounter; i++){
+            ind = i * 5 + 3;
+            console.log("Manufacturer acc# ", i, ": ", manufacturers.returnAddress(ind));
+        }
+    }
 }

@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
 import "./Roles.sol";
+import "hardhat/console.sol";
 
 contract Wholesale {
     using Roles for Roles.Role;
@@ -43,9 +44,11 @@ contract Wholesale {
         return wholesales.returnAddress(accNumber);
     }
 
-    // function showAllWH() public view {
-    //     for(uint i = 0; i < wholesales.length; i++){
-    //         console.log("Wholesale acc# ", i, ": ", wholesales[i]);
-    //     }
-    // }
+    function showAllWD() public view {
+        uint ind = 0;
+        for(uint i = 0; i < wdcounter; i++){
+            ind = i * 5 + 1;
+            console.log("Wholesale acc# ", i, ": ", wholesales.returnAddress(ind));
+        }
+    }
 }

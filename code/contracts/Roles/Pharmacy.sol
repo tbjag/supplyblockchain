@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
 import "./Roles.sol";
+import "hardhat/console.sol";
 
 contract Pharmacy {
     using Roles for Roles.Role;
@@ -44,10 +45,12 @@ contract Pharmacy {
         return _pharmacies.returnAddress(accNumber);
     }
 
-    // function showAllPH() public view {
-    //     for(uint i = 0; i < _pharmacies.length; i++){
-    //         console.log("Pharmacy acc# ", i, ": ", _pharmacies[i]);
-    //     }
-    // }
+    function showAllPH() public view {
+        uint ind = 0;
+        for(uint i = 0; i < phcounter; i++){
+            ind = i * 5;
+            console.log("Pharmacy acc# ", i, ": ", _pharmacies.returnAddress(ind));
+        }
+    }
 
 }

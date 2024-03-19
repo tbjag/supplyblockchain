@@ -50,18 +50,19 @@ const App = () => {
             setWeb3(web3Instance);
             setAccounts(accounts);
             setContract(contractInstance);
+            console.log();
         } catch (error) {
             console.error('Error initializing DApp:', error);
           }
         };
       init();
     }, []);
-
+    
   // Filter navigation links based on allowed entity type
   const filteredNavLinks = navLinks.filter(navLink =>
     navLink.label.toLowerCase() === config.entity_type
   );
-  
+
   return (
     <BrowserRouter>
       <div>

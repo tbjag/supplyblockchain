@@ -127,11 +127,8 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     function sendDrugRequestPH(uint drugID, uint quant, uint WDaccNum, uint dcCode)  public payable 
         onlyPH()   {
         uint totalPrice = (drugs[drugID].price - discountCodes[dcCode].discountPrice) * quant;
-	    console.log("total price: ", totalPrice);
-	    console.log("msg.value: ", msg.value);
         address payable toWDaddr = payable(super.getWDaddr(WDaccNum));
-
-        require(totalPrice <= msg.value/(10**18), "Insufficient fund.");
+        require(totalPrice <= msg.value, "Insufficient fund.");
 
         uint reqID = drugID + quant + dcCode + WDaccNum + block.timestamp%1000;
         pharmacyRequests[msg.sender].push(DrugRequest(reqID, drugID, quant, totalPrice, msg.sender, toWDaddr, false));
@@ -234,11 +231,11 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         }
     }
 
-    // function showAllEntities() public view {
-    //     super.showAllPH();
-    //     super.showAllWH();
-    //     super.showAllMA();
-    //     super.showAllIN();
-    // }
+    function showAllEntities() public view {
+        super.showAllPH();
+        super.showAllWD();
+        super.showAllMA();
+        super.showAllIN();
+    }
 
 }

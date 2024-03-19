@@ -44,9 +44,11 @@ contract Insurer {
         return insurers.returnAddress(accNumber);
     }
 
-    // function showAllIN() public view {
-    //     for(uint i = 0; i < insurers.length; i++){
-    //         console.log("Insurer acc# ", i, ": ", insurers[i]);
-    //     }
-    // }
+    function showAllIN() public view {
+        uint ind = 0;
+        for(uint i = 0; i < incounter; i++){
+            ind = i * 5 + 2;
+            console.log("Insurer acc# ", i, ": ", insurers.returnAddress(ind));
+        }
+    }
 }
