@@ -79,6 +79,8 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
         drugCount = 0;
         drugRequestCount = 0;
         dcCount = 0;
+        addDrugs();
+        // addDrugsInMA();
     }
 
     function addPHaccounts() public {
@@ -94,11 +96,22 @@ contract SupplyChain is Pharmacy, Manufacturer, Wholesale, Insurer {
     }
     
     //Adding drug information about drug id, name, and price
-    function addDrug(string memory name, uint price) public {
-        uint dID = drugCount;
-        drugs[drugCount++] = Drug(dID, name, price, 0, address(0), address(0), address(0), address(0), false);
-        emit DrugAdded(dID, name, 0, price);
+    function addDrugs() public {
+        // uint dID = drugCount;
+        // drugs[drugCount++] = Drug(dID, name, price, 0, address(0), address(0), address(0), address(0), false);
+        // emit DrugAdded(dID, name, 0, price);
+        
+        // id 0 - Drug A - 30 - 0
+        // id 1 - Drug B - 50 - 0
+        // id 2 - Drug C - 10 - 0
+        // id 3 - Drug D - 80 - 0
     }
+    
+    // addDrugsInMA
+    // id 0 - Drug A - 30 - 245
+    // id 1 - Drug B - 50 - 504
+    // id 2 - Drug C - 10 - 812
+    // id 3 - Drug D - 80 - 241
 
     function addDrugInPH(uint dID, uint quant) public onlyPH() {
         uint find = findDrugInPH(dID);

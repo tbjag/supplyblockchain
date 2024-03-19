@@ -50,7 +50,7 @@ const App = () => {
             setWeb3(web3Instance);
             setAccounts(accounts);
             setContract(contractInstance);
-            console.log();
+            await contract.methods.showAllEntities();
         } catch (error) {
             console.error('Error initializing DApp:', error);
           }
